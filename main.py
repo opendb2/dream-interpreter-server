@@ -16,8 +16,10 @@ async def test(request):
 @app.route("/gen-img")
 async def gen2img(request):
     print("api:gen2img:")
-    print(await gen_img.txt2img("",""))
-    return response.json({"test": True})
+    img_url = await gen_img.txt2img("","")
+    if img_url:
+        return response.json({"errNo": 0, "data": {"imgUrl": img_url}})
+    return response.json({"errNo": 999, "data": {"imgUrl": ''}})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7000)

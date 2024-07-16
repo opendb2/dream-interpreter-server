@@ -2,6 +2,7 @@ import civitai
 import os
 
 async def txt2img(account_info, params):
+    img_url = ""
     input = {
         "model": "urn:air:sdxl:checkpoint:civitai:101055@128078",
         "params": {
@@ -34,4 +35,4 @@ async def txt2img(account_info, params):
     else:
         print("No image was created, the job is not yet complete, or the result is not available.")
     print('response:', img_response)
-    return img_response
+    return image_url
