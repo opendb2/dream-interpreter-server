@@ -1,2 +1,2 @@
 sanic>=24.6.0
-civitai-py>=1.0.0
+civitai-py>=0.1.9
