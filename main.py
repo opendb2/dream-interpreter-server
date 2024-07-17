@@ -9,14 +9,17 @@ import gen_img
 init.init()
 app = Sanic("Example")
 
-@app.route("/")
+@app.route("/api", methods=["POST", "PUT"])
 async def test(request):
     return response.json({"test": True})
 
-@app.route("/gen-img")
+@app.route("/api/gen-img", methods=["POST", "GET", "PUT"])
 async def gen2img(request):
     print("api:gen2img:")
-    img_url = await gen_img.txt2img("","")
+    params = request.json
+    print("gen-img:params:", params, params["promote"])
+    # img_url = ""
+    img_url = await gen_img.txt2img("", params["promote"])
     if img_url:
         return response.json({"errNo": 0, "data": {"imgUrl": img_url}})
     return response.json({"errNo": 999, "data": {"imgUrl": ''}})
