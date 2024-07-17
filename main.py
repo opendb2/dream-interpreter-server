@@ -9,6 +9,9 @@ import gen_img
 init.init()
 app = Sanic("Example")
 
+@app.route("/api/test-img", methods=["POST", "GET", "PUT"])
+async def test_img(request):
+    return response.json({"errNo": 0, "data": {"imgUrl": 'https://blobs-temp.sfo3.digitaloceanspaces.com/C7E3144965E8CEF284ADA436DDA792C53EADE2D1D94AD35E501327BFBC785C25?X-Amz-Expires=3600&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00F84RAAYEUTBJ6D9L%2F20240717%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240717T064308Z&X-Amz-SignedHeaders=host&X-Amz-Signature=5edfbc291b59245786cc7be87402325502893e62b198277877899f582da1e7bc'}})
 @app.route("/api", methods=["POST", "PUT"])
 async def test(request):
     return response.json({"test": True})
