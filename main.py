@@ -5,6 +5,7 @@ init.init()
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from sanic import Sanic, response
 import gen_img
+import gen_txt_tencent
 
 init.init()
 app = Sanic("Example")
@@ -16,6 +17,14 @@ async def test_img(request):
 async def test(request):
     return response.json({"test": True})
 
+@app.route("/api/gen-chat", methods=["POST", "GET", "PUT"])
+async def gen_chat(request):
+    params = request.json
+    if params["messages"] is None:
+        return response.json({"errNo": 999, "data": '缺少对话信息'})
+    print("gen_chat:messages:", params["messages"])
+    res = await gen_txt_tencent.tencent_chat(params["messages"])
+    return response.json({"errNo": 0, "data": {"suggest": res}})
 @app.route("/api/gen-img", methods=["POST", "GET", "PUT"])
 async def gen2img(request):
     print("api:gen2img:")
