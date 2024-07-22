@@ -3,3 +3,4 @@ python-dotenv>=1.0.1
 civitai-py>=0.1.9
 openai>=-1.35.10
 tencentcloud_sdk_python_hunyuan>=3.0.0
+peewee>=3.17.6

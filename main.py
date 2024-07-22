@@ -21,7 +21,7 @@ async def test(request):
 async def gen_chat(request):
     params = request.json
     if params["messages"] is None:
-        return response.json({"errNo": 999, "data": '缺少对话信息'})
+        return response.json({"errNo": 999, "data": 'messages is required'})
     print("gen_chat:messages:", params["messages"])
     res = await gen_txt_tencent.tencent_chat(params["messages"])
     return response.json({"errNo": 0, "data": {"suggest": res}})
@@ -35,6 +35,20 @@ async def gen2img(request):
     if img_url:
         return response.json({"errNo": 0, "data": {"imgUrl": img_url}})
     return response.json({"errNo": 999, "data": {"imgUrl": ''}})
+
+@app.route("/api/share", methods=["POST", "PUT"])
+async def share(request):
+    params = request.json
+    suggest = ""
+    if params["prompt"] is None:
+        return response.json({"errNo": 999, "data": 'prompt is required'})
+    if params["img"] is None:
+        return response.json({"errNo": 999, "data": 'img is required'})
+    if params["messages"] is None:
+        return response.json({"errNo": 999, "data": 'messages are required'})
+    if params["suggest"] is not None:
+        suggest = params["messages"]
+    return response.json({"test": True})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7000)
