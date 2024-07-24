@@ -6,9 +6,16 @@ init.init()
 from sanic import Sanic, response
 import gen_img
 import gen_txt_tencent
+import orm.mysql_models as db_models
+import common as common_api
 
 init.init()
 app = Sanic("Example")
+
+@app.route("/api/test-sql", methods=["POST", "GET", "PUT"])
+async def test_sql(request):
+    res = await common_api.share_view_by_id()
+    return response.json({"errNo": 0, "data": {}})
 
 @app.route("/api/test-img", methods=["POST", "GET", "PUT"])
 async def test_img(request):
@@ -47,8 +54,9 @@ async def share(request):
     if params["messages"] is None:
         return response.json({"errNo": 999, "data": 'messages are required'})
     if params["suggest"] is not None:
-        suggest = params["messages"]
-    return response.json({"test": True})
+        suggest = params["suggest"]
+    id = await common_api.share_view_by_id()
+    return response.json({"errNo": 0, "data": {"id": id}})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7000)
