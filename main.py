@@ -55,8 +55,46 @@ async def share(request):
         return response.json({"errNo": 999, "data": 'messages are required'})
     if params["suggest"] is not None:
         suggest = params["suggest"]
-    id = await common_api.share_view_by_id()
+    id = await common_api.share_view_save(params["prompt"], params["img"], params["messages"], params["suggest"])
     return response.json({"errNo": 0, "data": {"id": id}})
+
+@app.route("/api/share_get", methods=["POST", "PUT", "GET"])
+async def share_get(request):
+    params = request.json
+    if params["id"] is None:
+        return response.json({"errNo": 999, "data": 'id is required'})
+    dream = await common_api.share_view_save(params["id"])
+    if dream is None:
+        response.json({"errNo": 0,
+                       "data": {}})
+    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.messages, "suggest": dream.suggest}})
+
+
+@app.route("/api/dream_save", methods=["POST", "PUT"])
+async def share(request):
+    params = request.json
+    suggest = ""
+    if params["prompt"] is None:
+        return response.json({"errNo": 999, "data": 'prompt is required'})
+    if params["img"] is None:
+        return response.json({"errNo": 999, "data": 'img is required'})
+    if params["messages"] is None:
+        return response.json({"errNo": 999, "data": 'messages are required'})
+    if params["suggest"] is not None:
+        suggest = params["suggest"]
+    id = await common_api.dream_save(params["prompt"], params["img"], params["messages"], params["suggest"])
+    return response.json({"errNo": 0, "data": {"id": id}})
+
+@app.route("/api/dream_get", methods=["POST", "PUT", "GET"])
+async def share_get(request):
+    params = request.json
+    if params["id"] is None:
+        return response.json({"errNo": 999, "data": 'id is required'})
+    dream = await common_api.share_view_save(params["id"])
+    if dream is None:
+        response.json({"errNo": 0,
+                       "data": {}})
+    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.messages, "suggest": dream.suggest}})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7000)

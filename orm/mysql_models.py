@@ -7,7 +7,21 @@ db = connect('mysql://root:guchanDabai2@sh-cynosdbmysql-grp-fl63f6xe.sql.tencent
 class BaseModel(Model):
     class Meta:
         database = db
+'''
+Dream 分享后的镜像快照表
+'''
 class Dream_Share(BaseModel):
+    id = AutoField()
+    prompt = TextField()
+    img = CharField()
+    conversations = CharField()
+    suggest = CharField()
+    share_date = DateTimeField(default=datetime.datetime.now)
+
+'''
+Dream 表
+'''
+class Dream(BaseModel):
     id = AutoField()
     prompt = TextField()
     img = CharField()
