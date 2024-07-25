@@ -8,7 +8,7 @@ async def share_create(prompt="", img="", messages=[], suggest="", dream_id=0):
         share_dream = db_models.Dream_Share.create()
         share_dream.prompt = prompt
         share_dream.img = img
-        share_dream.messages = json.dumps(messages)
+        share_dream.conversations = json.dumps(messages)
         share_dream.suggest = suggest
         share_dream.dream_id = dream_id
         share_dream.save()
@@ -42,7 +42,7 @@ async def dream_update(id, prompt="", img="", messages=[], suggest=""):
         if img != "":
             dream.img = img
         if messages != "":
-            dream.messages = messages
+            dream.conversations = messages
         if suggest != "":
             dream.suggest = suggest
         dream.save()
@@ -54,14 +54,14 @@ async def dream_update(id, prompt="", img="", messages=[], suggest=""):
     return curId
 
 async def dream_save(prompt="", img="", messages=[], suggest=""):
-    print('dream_save:')
+    print('dream_save:messages:', messages)
     db_models.db.connect()
     id = None
     try:
         dream = db_models.Dream.create()
         dream.prompt = prompt
         dream.img = img
-        dream.messages = json.dumps(messages)
+        dream.conversations = json.dumps(messages)
         dream.suggest = suggest
         dream.save()
         print('dream_save:id:', dream.id)
