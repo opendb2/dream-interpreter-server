@@ -1,7 +1,7 @@
 import orm.mysql_models as db_models
 import json
 
-async def share_create(prompt="", img="", messages=[], suggest="", dream_id):
+async def share_create(prompt="", img="", messages=[], suggest="", dream_id=0):
     db_models.db.connect()
     id = None
     try:

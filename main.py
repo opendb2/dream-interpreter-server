@@ -60,19 +60,20 @@ async def share(request):
         suggest = params["suggest"]
     if dream_id is None:
         return response.json({"errNo": 999, "data": 'dream_id is required'})
-    id = await common_api.share_view_save(prompt, img, messages, suggest, dream_id)
+    id = await common_api.share_create(prompt, img, messages, suggest, dream_id)
     return response.json({"errNo": 0, "data": {"id": id}})
 
 @app.route("/api/share-get", methods=["POST", "PUT", "GET"])
 async def share_get(request):
     params = request.json
-    if params["id"] is None:
+    id = params.get("id", None)
+    if id is None:
         return response.json({"errNo": 999, "data": 'id is required'})
-    dream = await common_api.share_view_save(params["id"])
+    dream = await common_api.share_view_by_id(id)
     if dream is None:
         response.json({"errNo": 0,
                        "data": {}})
-    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.messages, "suggest": dream.suggest}})
+    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.conversations, "suggest": dream.suggest}})
 
 
 @app.route("/api/dream-update", methods=["POST", "PUT"])
@@ -96,13 +97,14 @@ async def dream_update(request):
 @app.route("/api/dream-get", methods=["POST", "PUT", "GET"])
 async def dream_get(request):
     params = request.json
-    if params["id"] is None:
+    id = params.get('id', None)
+    if id is None:
         return response.json({"errNo": 999, "data": 'id is required'})
-    dream = await common_api.share_view_save(params["id"])
+    dream = await common_api.dream_by_id(id)
     if dream is None:
         response.json({"errNo": 0,
                        "data": {}})
-    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.messages, "suggest": dream.suggest}})
+    return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.conversations, "suggest": dream.suggest}})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7000)
