@@ -6,7 +6,6 @@ init.init()
 from sanic import Sanic, response
 import gen_img
 import gen_txt_tencent
-import orm.mysql_models as db_models
 import common as common_api
 
 init.init()
@@ -46,19 +45,25 @@ async def gen2img(request):
 @app.route("/api/share", methods=["POST", "PUT"])
 async def share(request):
     params = request.json
-    suggest = ""
-    if params["prompt"] is None:
+    dream_id = params.get('dream_id', None)
+    prompt = params.get('prompt', None)
+    img = params.get('img', None)
+    messages = params.get('messages', None)
+    suggest = params.get('suggest', None)
+    if prompt is None:
         return response.json({"errNo": 999, "data": 'prompt is required'})
-    if params["img"] is None:
+    if img is None:
         return response.json({"errNo": 999, "data": 'img is required'})
-    if params["messages"] is None:
+    if messages is None:
         return response.json({"errNo": 999, "data": 'messages are required'})
-    if params["suggest"] is not None:
+    if suggest is not None:
         suggest = params["suggest"]
-    id = await common_api.share_view_save(params["prompt"], params["img"], params["messages"], params["suggest"])
+    if dream_id is None:
+        return response.json({"errNo": 999, "data": 'dream_id is required'})
+    id = await common_api.share_view_save(prompt, img, messages, suggest, dream_id)
     return response.json({"errNo": 0, "data": {"id": id}})
 
-@app.route("/api/share_get", methods=["POST", "PUT", "GET"])
+@app.route("/api/share-get", methods=["POST", "PUT", "GET"])
 async def share_get(request):
     params = request.json
     if params["id"] is None:
@@ -70,23 +75,26 @@ async def share_get(request):
     return response.json({"errNo": 0, "data": {"id": id, "prompt": dream.prompt, "img": dream.img, "messages": dream.messages, "suggest": dream.suggest}})
 
 
-@app.route("/api/dream_save", methods=["POST", "PUT"])
-async def share(request):
+@app.route("/api/dream-update", methods=["POST", "PUT"])
+async def dream_update(request):
     params = request.json
-    suggest = ""
-    if params["prompt"] is None:
+    id = params.get('id', None)
+    prompt = params.get('prompt', None)
+    img = params.get('img', None)
+    messages = params.get('messages', None)
+    suggest = params.get('suggest', None)
+    if prompt is None:
         return response.json({"errNo": 999, "data": 'prompt is required'})
-    if params["img"] is None:
+    if img is None:
         return response.json({"errNo": 999, "data": 'img is required'})
-    if params["messages"] is None:
+    if messages is None:
         return response.json({"errNo": 999, "data": 'messages are required'})
-    if params["suggest"] is not None:
-        suggest = params["suggest"]
-    id = await common_api.dream_save(params["prompt"], params["img"], params["messages"], params["suggest"])
+    id = await common_api.dream_update(id, prompt, img, messages, suggest)
+    print('api:dream-update:id:', id)
     return response.json({"errNo": 0, "data": {"id": id}})
 
-@app.route("/api/dream_get", methods=["POST", "PUT", "GET"])
-async def share_get(request):
+@app.route("/api/dream-get", methods=["POST", "PUT", "GET"])
+async def dream_get(request):
     params = request.json
     if params["id"] is None:
         return response.json({"errNo": 999, "data": 'id is required'})

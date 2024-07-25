@@ -17,6 +17,7 @@ class Dream_Share(BaseModel):
     conversations = CharField()
     suggest = CharField()
     share_date = DateTimeField(default=datetime.datetime.now)
+    dream_id = IntegerField()
 
 '''
 Dream 表

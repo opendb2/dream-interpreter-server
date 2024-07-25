@@ -5,6 +5,7 @@ CREATE TABLE `dream_share` (
   `conversations` varchar (10000) CHARACTER SET `utf8` COLLATE `utf8_general_ci` NULL DEFAULT '',
   `suggest` varchar (5000) CHARACTER SET `utf8` COLLATE `utf8_general_ci` NULL DEFAULT '',
   `share_date` datetime NOT NULL,
+  `dream_id` int (11) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = innodb DEFAULT CHARACTER SET = "utf8"
 CREATE TABLE `dream` (
