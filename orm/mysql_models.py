@@ -8,6 +8,7 @@ class BaseModel(Model):
     class Meta:
         database = db
 '''
+dream_share 表
 Dream 分享后的镜像快照表
 '''
 class Dream_Share(BaseModel):
@@ -20,7 +21,7 @@ class Dream_Share(BaseModel):
     dream_id = IntegerField()
 
 '''
-Dream 表
+dream 表
 '''
 class Dream(BaseModel):
     id = AutoField()

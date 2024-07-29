@@ -1,4 +1,5 @@
 import orm.mysql_models as db_models
+from playhouse.shortcuts import model_to_dict
 import json
 
 async def share_create(prompt="", img="", messages=[], suggest="", dream_id=0):
@@ -27,6 +28,18 @@ async def share_view_by_id(id = 1):
     print('res.prompt:', res.prompt)
     db_models.db.close()
     return res
+
+async def share_list():
+    db_models.db.connect()
+    res_list = []
+    query  = db_models.Dream_Share.select().where(id != 0)
+    results = list(query)
+    print('share_list:select results:', results)
+    for cur in results:
+        # res_list.append(model_to_dict(cur))
+        res_list.append({"id": cur.id, "prompt": cur.prompt, "img": cur.img, "conversations": cur.conversations, "suggest": cur.suggest, "dream_id": cur.dream_id})
+    db_models.db.close()
+    return res_list
 
 async def dream_update(id, prompt="", img="", messages=[], suggest=""):
     print('dream_update:id:', id)

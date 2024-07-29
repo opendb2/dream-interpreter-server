@@ -1,4 +1,6 @@
 # This is a sample Python script.
+import json
+
 import init
 init.init()
 # Press Shift+F10 to execute it or replace it with your code.
@@ -81,7 +83,13 @@ async def share(request):
     id = await common_api.share_create(prompt, img, messages, suggest, dream_id)
     return response.json({"errNo": 0, "data": {"id": id}})
 
-@app.route("/api/share-get", methods=["POST", "PUT", "GET"])
+@app.route("/api/share-list", methods=["GET"])
+async def share_list(request):
+    list = await common_api.share_list()
+    print("api/share-list: list:", list)
+    return response.json({"errNo": 0, "data": {"list": list}})
+
+@app.route("/api/share-get", methods=["POST", "GET"])
 async def share_get(request):
     params = request.json
     id = params.get("id", None)
@@ -112,7 +120,7 @@ async def dream_update(request):
     print('api:dream-update:id:', id)
     return response.json({"errNo": 0, "data": {"id": id}})
 
-@app.route("/api/dream-get", methods=["POST", "PUT", "GET"])
+@app.route("/api/dream-get", methods=["POST", "GET"])
 async def dream_get(request):
     params = request.json
     id = params.get('id', None)
