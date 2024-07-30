@@ -38,5 +38,5 @@ async def txt2img(model, promote=txt2img_promote):
         print("No image was created, the job is not yet complete, or the result is not available.")
     print('response:', img_response)
     # 将 img 上传到 cos，返回 cos link
-    res = bucket.img2bucket(image_url)
+    res = await bucket.img2bucket(image_url)
     return bucket.assembl_cos_file_url(res.get("file_name", None))
