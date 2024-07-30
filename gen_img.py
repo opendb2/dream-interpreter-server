@@ -1,4 +1,5 @@
 import civitai
+import util.bucket as bucket
 
 txt2img_promote = "RAW photo, face portrait photo of woman, wearing black dress, happy face, hard shadows, cinematic shot, dramatic lighting"
 
@@ -36,4 +37,6 @@ async def txt2img(model, promote=txt2img_promote):
     else:
         print("No image was created, the job is not yet complete, or the result is not available.")
     print('response:', img_response)
-    return image_url
+    # 将 img 上传到 cos，返回 cos link
+    res = bucket.img2bucket(image_url)
+    return bucket.assembl_cos_file_url(res.get("file_name", None))

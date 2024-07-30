@@ -10,14 +10,24 @@ import gen_img
 import gen_txt_tencent
 import common as common_api
 import gen_txt_gpt as gpt_text
+import util.bucket as bucket
 
 init.init()
 app = Sanic("Example")
 
-@app.route("/api/test-sql", methods=["POST", "GET", "PUT"])
-async def test_sql(request):
-    res = await common_api.share_view_by_id()
-    return response.json({"errNo": 0, "data": {}})
+
+# @app.route("/api/test-sql", methods=["GET"])
+# async def test_sql(request):
+#     res = await common_api.share_view_by_id()
+#     return response.json({"errNo": 0, "data": {}})
+
+# 测试 cos 上传
+# @app.route("/api/test-cos", methods=["GET"])
+# async def test_cos(request):
+#     res = await bucket.img2bucket("https://pic.52112.com/180128/Unicorns/Afb0IIfm0u.jpg")
+#     print(res)
+#     print('file url:', bucket.assembl_cos_file_url(res.get("file_name", None)))
+#     return response.json({"errNo": 0, "data": {}})
 
 @app.route("/api/test-img", methods=["POST", "GET", "PUT"])
 async def test_img(request):
