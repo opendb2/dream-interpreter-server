@@ -32,7 +32,7 @@ async def share_view_by_id(id = 1):
 async def share_list():
     db_models.db.connect()
     res_list = []
-    query  = db_models.Dream_Share.select().where(id != 0)
+    query  = db_models.Dream_Share.select().where(id != 0).order_by(db_models.Dream_Share.share_date.desc())
     results = list(query)
     print('share_list:select results:', results)
     for cur in results:
