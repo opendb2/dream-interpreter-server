@@ -11,6 +11,7 @@ import gen_txt_tencent
 import common as common_api
 import gen_txt_gpt as gpt_text
 import util.bucket as bucket
+import gen_img_fal as fal_gen
 
 init.init()
 app = Sanic("Example")
@@ -33,6 +34,10 @@ app = Sanic("Example")
 async def test_img(request):
     return response.json({"errNo": 0, "data": {"imgUrl": 'https://blobs-temp.sfo3.digitaloceanspaces.com/C7E3144965E8CEF284ADA436DDA792C53EADE2D1D94AD35E501327BFBC785C25?X-Amz-Expires=3600&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00F84RAAYEUTBJ6D9L%2F20240717%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240717T064308Z&X-Amz-SignedHeaders=host&X-Amz-Signature=5edfbc291b59245786cc7be87402325502893e62b198277877899f582da1e7bc'}})
 
+@app.route("/api/test-img-fal", methods=["GET"])
+async def test_img_fal(request):
+    fal_gen.txt2img()
+    return response.json({"errNo": 0, "data": {}})
 @app.route("/api/test-gpt", methods=["POST", "GET", "PUT"])
 async def test_gpt(request):
     res = await gpt_text.gpt_chat([])
@@ -63,11 +68,11 @@ async def gen_chat(request):
     return response.json({"errNo": 0, "data": {"suggest": res}})
 @app.route("/api/gen-img", methods=["POST", "GET", "PUT"])
 async def gen2img(request):
-    print("api:gen2img:")
     params = request.json
-    print("gen-img:params:", params, params["promote"])
+    promote = params.get('promote', None)
     # img_url = ""
-    img_url = await gen_img.txt2img("", params["promote"])
+    # img_url = await gen_img.txt2img("", params["promote"])
+    img_url = await fal_gen.txt2img(promote)
     if img_url:
         return response.json({"errNo": 0, "data": {"imgUrl": img_url}})
     return response.json({"errNo": 999, "data": {"imgUrl": ''}})
